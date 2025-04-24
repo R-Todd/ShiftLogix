@@ -1,0 +1,45 @@
+<!-- File: templates/availability.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Availability - ShiftLogix</title>
+</head>
+<body>
+  <h1>Set Your Availability</h1>
+
+  <!-- Flash Messages -->
+  {% if messages %}
+    {% for category, msg in messages %}
+      <div class="{{ category }}">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <!-- Submit Availability Form -->
+  <form action="/availability" method="POST">
+    <label>Day of the Week:</label>
+    <input type="text" name="day_of_week" required><br>
+
+    <label>Start Time:</label>
+    <input type="time" name="start_time" required><br>
+
+    <label>End Time:</label>
+    <input type="time" name="end_time" required><br>
+
+    <button type="submit">Submit Availability</button>
+  </form>
+
+  <hr>
+
+  <h2>Your Availability</h2>
+  {% if availabilities %}
+    <ul>
+      {% for slot in availabilities %}
+        <li>{{ slot.day_of_week }}: {{ slot.start_time }} - {{ slot.end_time }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No availability submitted yet.</p>
+  {% endif %}
+</body>
+</html>

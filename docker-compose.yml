@@ -1,0 +1,124 @@
+services:
+  # -----------------------------
+  # AUTH SERVICE + DB
+  # -----------------------------
+  auth-db:
+    image: mysql:8.0
+    container_name: auth-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${AUTH_DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - auth_db_data:/var/lib/mysql
+
+  auth-service:
+    build:
+      context: ./auth_service
+    container_name: auth-service
+    depends_on:
+      - auth-db
+    ports:
+      - "5001:5001"
+    env_file:
+      - ./auth_service/.env
+    working_dir: /app
+    command: ["./wait-for-db.sh", "python", "run.py"]
+    volumes:
+      - ./auth_service:/app
+
+  # -----------------------------
+  # CLOCK SERVICE + DB
+  # -----------------------------
+  clock-db:
+    image: mysql:8.0
+    container_name: clock-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${CLOCK_DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - clock_db_data:/var/lib/mysql
+
+  clock-service:
+    build:
+      context: ./clock_service
+    container_name: clock-service
+    depends_on:
+      - clock-db
+    ports:
+      - "5002:5002"
+    env_file:
+      - ./clock_service/.env
+    working_dir: /app
+    command: ["./wait-for-db.sh", "python", "run.py"]
+    volumes:
+      - ./clock_service:/app
+
+  # -----------------------------
+  # SCHEDULE SERVICE + DB
+  # -----------------------------
+  schedule-db:
+    image: mysql:8.0
+    container_name: schedule-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${SCHEDULE_DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3309:3306"
+    volumes:
+      - schedule_db_data:/var/lib/mysql
+
+  schedule-service:
+    build:
+      context: ./schedule_service
+    container_name: schedule-service
+    depends_on:
+      - schedule-db
+    ports:
+      - "5003:5003"
+    env_file:
+      - ./schedule_service/.env
+    working_dir: /app
+    command: ["./wait-for-db.sh", "python", "run.py"]
+    volumes:
+      - ./schedule_service:/app
+
+  # -----------------------------
+  # API GATEWAY
+  # -----------------------------
+  api-gateway:
+    build:
+      context: ./api_gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./api_gateway/.env
+    volumes:
+      - ./api_gateway:/app
+    working_dir: /app
+    depends_on:
+      - auth-service
+      - clock-service
+      - schedule-service
+    command: ["python", "run.py"]
+
+# -----------------------------
+# Docker Volumes
+# -----------------------------
+volumes:
+  auth_db_data:
+  clock_db_data:
+  schedule_db_data:

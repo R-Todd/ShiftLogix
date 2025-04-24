@@ -1,0 +1,49 @@
+<!-- File: templates/schedule.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule - ShiftLogix</title>
+</head>
+<body>
+  <h1>Your Assigned Shifts</h1>
+
+  <!-- Flash Messages -->
+  {% if messages %}
+    {% for category, msg in messages %}
+      <div class="{{ category }}">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+
+  {% if shifts %}
+    <ul>
+      {% for shift in shifts %}
+        <li>{{ shift.shift_date }} | {{ shift.start_time }} - {{ shift.end_time }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No shifts assigned.</p>
+  {% endif %}
+
+  <hr>
+  <h2>Request Shift Change</h2>
+  <form action="/schedule" method="POST">
+    <label>Shift Date:</label>
+    <input type="date" name="shift_date" required><br>
+
+    <label>Start Time:</label>
+    <input type="time" name="start_time" required><br>
+
+    <label>End Time:</label>
+    <input type="time" name="end_time" required><br>
+
+    <label>Request Type:</label>
+    <select name="request_type" required>
+      <option value="add">Add</option>
+      <option value="drop">Drop</option>
+    </select><br>
+
+    <button type="submit">Submit Shift Request</button>
+  </form>
+</body>
+</html>
