@@ -1,97 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Schedule View - ShiftLogix</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background-color: #007BFF;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .banner h1 {
-      margin: 0;
-      font-size: 2em;
-    }
-    h1, h2 {
-      color: #333;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    table, th, td {
-      border: 1px solid #ccc;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-    }
-    section {
-      margin-bottom: 30px;
-    }
-    form label {
-      display: inline-block;
-      width: 100px;
-      margin-top: 10px;
-    }
-    form input, form select {
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-    .top-right {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-    }
-    .top-right a {
-      text-decoration: none;
-      color: white;
-      font-size: 0.9em;
-      padding: 8px 12px;
-      background-color: grey;
-      border: 1px solid #fff;
-      border-radius: 4px;
-    }
-    .flashes {
-      list-style-type: none;
-      padding: 0;
-      margin: 20px 0;
-    }
-    .flashes li {
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 4px;
-    }
-    .flashes li.success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .flashes li.error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-  </style>
-</head>
-<body>
+{% extends "base.html" %}
+{% block content %}
   <header>
-    <div class="banner">
-      <h1>ShiftLogix</h1>
-    </div>
+    <h1>ShiftLogix</h1>
   </header>
-  <div class="top-right">
-    <a href="{{ url_for('employee_dashboard.dashboard_view', user_id=current_user) }}">Back to Dashboard</a>
-  </div>
-  
+
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -101,61 +13,54 @@
       </ul>
     {% endif %}
   {% endwith %}
-  
-  <h1>Schedule View</h1>
-  
-  <section id="weekly-schedule">
-    <h2>Weekly Schedule</h2>
+
+  <h2>Your Schedule</h2>
+
+  <!-- Add a new shift -->
+  <section id="add-shift">
+    <form method="post">
+      <label for="start_time">Start:</label>
+      <input type="datetime-local" id="start_time" name="start_time" required>
+      <br>
+      <label for="end_time">End:</label>
+      <input type="datetime-local" id="end_time" name="end_time" required>
+      <br>
+      <button type="submit">Add Shift</button>
+    </form>
+  </section>
+
+  <!-- List all shifts -->
+  <section id="all-shifts">
+    <h3>All Shifts</h3>
     {% if shifts %}
       <table>
         <thead>
           <tr>
             <th>Shift ID</th>
+            <th>Employee ID</th>
             <th>Start Time</th>
             <th>End Time</th>
-            <th>Date</th>
           </tr>
         </thead>
         <tbody>
           {% for shift in shifts %}
             <tr>
               <td>{{ shift.shiftId }}</td>
-              <td>{{ shift.scheduled_start }}</td>
-              <td>{{ shift.scheduled_end }}</td>
-              <td>{{ shift.scheduled_start.strftime('%Y-%m-%d') }}</td>
+              <td>{{ shift.employee_id }}</td>
+              <td>{{ shift.start_time }}</td>
+              <td>{{ shift.end_time }}</td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     {% else %}
-      <p>No scheduled shifts for this week.</p>
+      <p>No shifts recorded.</p>
     {% endif %}
   </section>
-  
-  <section id="navigation">
-    <h2>Navigation</h2>
-    <p>
-      <a href="{{ url_for('availability.availability_view', user_id=current_user) }}">Availability</a>
-    </p>
-  </section>
-  
-  <section id="add-drop-request">
-    <h2>Request Add/Drop Shift</h2>
-    <form method="POST" action="{{ url_for('schedule.schedule_view', user_id=current_user) }}">
-      <label for="shift_id">Shift ID:</label>
-      <input type="text" id="shift_id" name="shift_id" required>
-      <br>
-      <label for="action">Action:</label>
-      <select id="action" name="action">
-        <option value="add">Add</option>
-        <option value="drop">Drop</option>
-      </select>
-      <br>
-      <label for="reason">Reason:</label>
-      <input type="text" id="reason" name="reason" required>
-      <br>
-      <button type="submit">Submit Request</button>
-    </form>
-  </section>
-</body>
-</html>
+
+  <!-- Navigation -->
+  <p style="margin-top:20px;">
+    <a href="{{ url_for('home.dashboard') }}">← Back to Dashboard</a> |
+    <a href="{{ url_for('availability.availability_view') }}">Edit Availability</a>
+  </p>
+{% endblock %}

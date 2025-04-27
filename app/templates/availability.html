@@ -1,94 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Availability View - ShiftLogix</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
-      color: #333;
-    }
-    header {
-      background-color: #007BFF;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .banner h1 {
-      margin: 0;
-      font-size: 2em;
-    }
-    h1, h2 {
-      color: #333;
-    }
-    .form-section {
-      margin-bottom: 30px;
-    }
-    label {
-      display: inline-block;
-      width: 120px;
-      margin-top: 10px;
-    }
-    input, select {
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-    table {
-      border-collapse: collapse;
-      width: 50%;
-      margin-top: 20px;
-    }
-    table, th, td {
-      border: 1px solid #ccc;
-      padding: 8px;
-    }
-    .top-right {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .top-right a {
-      text-decoration: none;
-      color: white;
-      background-color: grey;
-      font-size: 0.9em;
-      padding: 8px 12px;
-      border: 1px solid #fff;
-      border-radius: 4px;
-    }
-    .flashes {
-      list-style-type: none;
-      padding: 0;
-      margin: 20px 0;
-    }
-    .flashes li {
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 4px;
-    }
-    .flashes li.success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .flashes li.error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="banner">
-      <h1>ShiftLogix</h1>
-    </div>
-  </header>
-  <div class="top-right">
-    <a href="{{ url_for('employee_dashboard.dashboard_view', user_id=current_user) }}">Back to Dashboard</a>
-  </div>
-  
+{% extends "base.html" %}
+{% block content %}
+  <h2>Availability</h2>
+
+  <!-- Update availability form -->
+  <form method="post">
+    <label for="day_of_week">Day of Week:</label>
+    <select id="day_of_week" name="day_of_week" required>
+      {% for d in ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] %}
+        <option value="{{ d }}">{{ d }}</option>
+      {% endfor %}
+    </select>
+    <br>
+    <label for="is_available">Available?</label>
+    <input type="checkbox" id="is_available" name="is_available">
+    <br>
+    <button type="submit">Update Availability</button>
+  </form>
+
+  <!-- Flash messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flashes">
@@ -98,61 +27,23 @@
       </ul>
     {% endif %}
   {% endwith %}
-  
-  <h1>Availability View</h1>
-  
-  <section class="form-section">
-    <h2>Update Your Availability</h2>
-    <form method="POST" action="{{ url_for('availability.availability_view', user_id=current_user) }}">
-      <label for="day_of_week">Day of Week:</label>
-      <select id="day_of_week" name="day_of_week" required>
-        <option value="Monday">Monday</option>
-        <option value="Tuesday">Tuesday</option>
-        <option value="Wednesday">Wednesday</option>
-        <option value="Thursday">Thursday</option>
-        <option value="Friday">Friday</option>
-        <option value="Saturday">Saturday</option>
-        <option value="Sunday">Sunday</option>
-      </select>
-      <br>
-      <label for="available_start">Start Time (HH:MM):</label>
-      <input type="text" id="available_start" name="available_start" placeholder="09:00" required>
-      <br>
-      <label for="available_end">End Time (HH:MM):</label>
-      <input type="text" id="available_end" name="available_end" placeholder="17:00" required>
-      <br>
-      <button type="submit">Update Availability</button>
-    </form>
-  </section>
-  
-  <section>
-    <h2>Your Current Availability</h2>
-    {% if availabilities %}
-      <table>
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in availabilities %}
-            <tr>
-              <td>{{ record.day_of_week }}</td>
-              <td>{{ record.available_start.strftime('%H:%M') }}</td>
-              <td>{{ record.available_end.strftime('%H:%M') }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>No availability set yet.</p>
-    {% endif %}
-  </section>
-  
-  <p>
-    <a href="{{ url_for('employee_dashboard.dashboard_view', user_id=current_user) }}">Back to Dashboard</a>
+
+  <!-- List your availability requests -->
+  <h3>Your Availability Requests</h3>
+  {% if slots %}
+    <ul>
+      {% for slot in slots %}
+        <li>{{ slot.reason }} → {{ slot.status }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no availability requests yet.</p>
+  {% endif %}
+
+  <!-- Navigation -->
+  <p style="margin-top:20px;">
+    <a href="{{ url_for('home.dashboard') }}">← Back to Dashboard</a> |
+    <a href="{{ url_for('schedule.schedule_view') }}">View Schedule</a> |
+    <a href="{{ url_for('clock.clock_view') }}">Clock In/Out</a>
   </p>
-</body>
-</html>
+{% endblock %}
