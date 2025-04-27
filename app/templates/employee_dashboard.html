@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Dashboard - ShiftLogix</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .info {
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .info p {
+      margin: 8px 0;
+    }
+    .nav-buttons a,
+    .nav-buttons button {
+      margin-right: 10px;
+      padding: 8px 12px;
+      background-color: #007BFF;
+      color: white;
+      text-decoration: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .nav-buttons a:hover,
+    .nav-buttons button:hover {
+      background-color: #0056b3;
+    }
+    .flashes {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .flashes li {
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .flashes li.danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .flashes li.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ShiftLogix</h1>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <h2>Employee Dashboard</h2>
+  <div class="info">
+    <p><strong>User ID:</strong> {{ employee.userId }}</p>
+    <p><strong>Name:</strong> {{ employee.name }}</p>
+    <p><strong>Email:</strong> {{ employee.email }}</p>
+    <p><strong>Joined:</strong> {{ employee.joined_at.strftime("%Y-%m-%d") }}</p>
+  </div>
+
+  <div class="nav-buttons">
+    <a href="{{ url_for('clock.clock_view') }}">Clock In/Out</a>
+    <a href="{{ url_for('schedule.schedule_view') }}">View Schedule</a>
+    <a href="{{ url_for('availability.availability_view') }}">Edit Availability</a>
+    <form action="{{ url_for('auth.logout') }}" method="get" style="display:inline;">
+      <button type="submit">Logout</button>
+    </form>
+  </div>
+</body>
+</html>

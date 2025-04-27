@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content %}
+  <header>
+    <h1>ShiftLogix</h1>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  <h2>Your Schedule</h2>
+
+  <!-- Add a new shift -->
+  <section id="add-shift">
+    <form method="post">
+      <label for="start_time">Start:</label>
+      <input type="datetime-local" id="start_time" name="start_time" required>
+      <br>
+      <label for="end_time">End:</label>
+      <input type="datetime-local" id="end_time" name="end_time" required>
+      <br>
+      <button type="submit">Add Shift</button>
+    </form>
+  </section>
+
+  <!-- List all shifts -->
+  <section id="all-shifts">
+    <h3>All Shifts</h3>
+    {% if shifts %}
+      <table>
+        <thead>
+          <tr>
+            <th>Shift ID</th>
+            <th>Employee ID</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for shift in shifts %}
+            <tr>
+              <td>{{ shift.shiftId }}</td>
+              <td>{{ shift.employee_id }}</td>
+              <td>{{ shift.start_time }}</td>
+              <td>{{ shift.end_time }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No shifts recorded.</p>
+    {% endif %}
+  </section>
+
+  <!-- Navigation -->
+  <p style="margin-top:20px;">
+    <a href="{{ url_for('employee_dashboard.dashboard') }}">← Back to Dashboard</a> |
+    <a href="{{ url_for('availability.availability_view') }}">Edit Availability</a>
+  </p>
+{% endblock %}

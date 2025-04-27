@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Clock In / Out</h2>
+
+  <!-- Clock entry form -->
+  <form method="post" style="margin-bottom: 20px;">
+    <label for="start">Start:</label>
+    <input type="datetime-local" id="start" name="start" required>
+    <br>
+    <label for="end">End:</label>
+    <input type="datetime-local" id="end" name="end" required>
+    <br><br>
+    <button type="submit">Record Shift</button>
+  </form>
+
+  <!-- List of recorded shifts -->
+  <h3>Your Shifts</h3>
+  {% if shifts %}
+    <ul>
+      {% for s in shifts %}
+        <li>
+          {{ s.start_time }} → {{ s.end_time }} 
+          ({{ s.duration() }})
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No shifts recorded yet.</p>
+  {% endif %}
+
+  <!-- Back to dashboard -->
+  <p style="margin-top: 20px;">
+    <a href="{{ url_for('employee_dashboard.dashboard') }}">← Back to Dashboard</a>
+  </p>
+{% endblock %}
