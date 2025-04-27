@@ -7,7 +7,7 @@ from flask_jwt_extended import (
 )
 from datetime import timedelta
 from app import db
-from app.models import Employee, bcrypt
+from app.persistence.models import Employee, bcrypt #updated for /persistence/models.py
 from app.validators.log_in_validator import validate_log_in
 from app.validators.validate_register import validate_register
 

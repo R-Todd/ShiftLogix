@@ -8,7 +8,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
-from app.models import db, bcrypt
+from app.persistence.models import db, bcrypt
 
 # Load .env from the service root directory (auth_service/.env)
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
@@ -38,7 +38,7 @@ def create_app():
     jwt.init_app(app)
 
     # Register blueprints
-    from app.routes.auth_routes import auth_bp
+    from app.presentation.auth_routes import auth_bp
     app.register_blueprint(auth_bp)
 
     # Create DB tables
