@@ -1,7 +1,7 @@
 # clock_service/app/services/timesheet_service.py
 
-from app.models import db, Timesheet
 from datetime import datetime, timezone
+from app.persistence.models import db, Timesheet
 
 class TimesheetService:
     """

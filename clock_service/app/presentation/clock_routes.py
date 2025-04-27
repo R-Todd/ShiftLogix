@@ -10,7 +10,7 @@ UPDATED: Refactor to Layered Architecture for Clock Service
 
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.services.timesheet_service import TimesheetService
+from app.application.timesheet_service import TimesheetService
 
 
 # Initialize the clock blueprint
@@ -35,4 +35,24 @@ def clock_in():
         return jsonify(new_entry.to_dict()), 201
     except ValueError as e:
         # If the service raises an error (already clocked in), return 400
+        return jsonify({"error": str(e)}), 400
+
+
+@clock_bp.route('/out', methods=['POST'])
+@jwt_required()
+def clock_out():
+    """
+    Endpoint for employee clock-out.
+    Expects a POST request with JWT token in the header.
+    Returns the updated Timesheet entry on success.
+    """
+    employee_id = get_jwt_identity()
+    service = TimesheetService()
+
+    try:
+        # Call the service to clock out the employee
+        entry = service.clock_out(employee_id)
+        return jsonify(entry.to_dict()), 200
+    except ValueError as e:
+        # If the service raises an error (not clocked in), return 400
         return jsonify({"error": str(e)}), 400

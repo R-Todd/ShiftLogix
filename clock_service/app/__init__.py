@@ -3,12 +3,14 @@ File: clock_service/app/__init__.py
 Purpose: Initializes Flask app, database, JWT, and routes.
 """
 
-import os
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
-from dotenv import load_dotenv
-from app.models import db  # ✅ no bcrypt import
+import os                                    # stdlib, for paths and env lookup
+from flask import Flask                      # core web framework
+from flask_jwt_extended import JWTManager    # JWT support
+from dotenv import load_dotenv               # loads .env into os.environ
+
+# Persistence layer: SQLAlchemy `db` instance
+from app.persistence.models import db       
+
 
 # Load environment variables
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
@@ -30,7 +32,7 @@ def create_app():
     jwt.init_app(app)
 
     # Register blueprints
-    from app.routes.clock_routes import clock_bp
+    from app.presentation.clock_routes import clock_bp
     app.register_blueprint(clock_bp)
 
     # Create tables if needed
