@@ -75,3 +75,101 @@ ShiftLogix/
 │  ├─ templates/           # Jinja2 templates
 │  └─ static/              # CSS, JS, images
 └─ tests/                  # Unit and integration tests
+```
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.7+  
+- pip (or venv)  
+
+### Installation
+
+1. **Clone the repo**  
+   ```bash
+   git clone https://github.com/your-org/ShiftLogix.git
+   cd ShiftLogix
+   ```
+
+   ## (Optional) Create & activate a virtualenv
+    
+   ```bash
+   python -m venv venv
+   source venv/bin/activate   # Linux/Mac
+   venv\Scripts\activate      # Windows
+   ```
+
+   ## Install dependencies
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   ## Database Migrations
+  
+   ### Generate a migration after model changes
+   ```bash
+   python -m flask db migrate -m "Describe change"
+   ```
+   ### Apply migrations
+   ```bash
+   python -m flask db upgrade
+   ```
+   ## Running the App
+   ### Set environment variables (optional)
+   ```bash
+   export FLASK_APP=run.py
+   export FLASK_ENV=development
+   ```
+
+   ### Start the server
+   ```bash
+   python run.py
+   ```
+
+   Open your browser at `http://127.0.0.1:5000/`
+  
+   ---
+  
+   ## Usage
+  
+   - **Register** a new employee at `/register`
+   - **Log in** at `/login`
+   - **Clock In/Out** at `/clock`
+   - **View or Add Shifts** at `/schedule`
+   - **Set Availability** at `/availability`
+  
+   ---
+  
+   ## Contributing
+  
+   Contributions are welcome! Please open an issue or submit a pull request:
+  
+   1. **Fork** the repository  
+   2. **Create** a feature branch  
+      ```bash
+      git checkout -b feature/XXX
+      ```
+   ### Commit your changes
+   ```bash
+   git commit -m "Add XXX feature"
+   ```
+   
+   ### Push
+   ```bash
+   git push origin feature/XXX
+   ```
+   
+### Open a Pull Request
+
+1. Navigate to your fork on GitHub.  
+2. Click the **Compare & pull request** button.  
+3. Fill in the title and description.  
+4. Click **Create pull request**.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.  
