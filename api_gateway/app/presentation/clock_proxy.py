@@ -1,4 +1,4 @@
-# File: api_gateway/app/routes/clock_proxy.py
+# File: api_gateway/app/presentation/clock_proxy.py
 # Purpose: Proxies /api/clock/* to clock_service
 
 from flask import Blueprint, request, redirect, make_response, render_template

@@ -1,13 +1,12 @@
-# File: api_gateway/app/routes/schedule_proxy.py
+# File: api_gateway/app/presentation/schedule_proxy.py
 # Purpose: Proxies /api/schedule/* to schedule_service
 
-# File: api_gateway/app/routes/schedule_proxy.py
-# Purpose: Proxies /api/schedule/* to schedule_service
+
 
 from flask import Blueprint, request, jsonify
 import requests
-from app.utils.jwt_handler import jwt_required_gateway
-from app.gateway_config import SCHEDULE_SERVICE_URL
+from app.application.jwt_handler import jwt_required_gateway
+from app.application.gateway_config import SCHEDULE_SERVICE_URL
 
 schedule_bp = Blueprint("schedule_proxy", __name__, url_prefix="/api/schedule")
 

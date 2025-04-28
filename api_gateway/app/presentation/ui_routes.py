@@ -1,9 +1,9 @@
-# File: api_gateway/app/routes/ui_routes.py
+# File: api_gateway/app/presentation/ui_routes.py
 
 import requests
 from flask import Blueprint, render_template, request, redirect, make_response, flash, get_flashed_messages
-from app.utils.jwt_handler import jwt_required_gateway
-from app.gateway_config import AUTH_SERVICE_URL, CLOCK_SERVICE_URL, SCHEDULE_SERVICE_URL
+from app.application.jwt_handler import jwt_required_gateway
+from app.application.gateway_config import AUTH_SERVICE_URL, CLOCK_SERVICE_URL, SCHEDULE_SERVICE_URL
 
 ui_bp = Blueprint("ui_routes", __name__)
 

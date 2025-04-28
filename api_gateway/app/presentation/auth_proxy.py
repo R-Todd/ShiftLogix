@@ -1,4 +1,4 @@
-# File: api_gateway/app/routes/auth_proxy.py
+# File: api_gateway/app/presentation/auth_proxy.py
 # Purpose: Proxies /api/auth/* to auth_service
 
 from flask import Blueprint, request, redirect, make_response

@@ -1,0 +1,64 @@
+{
+    "folder-color.pathColors": [
+        {
+            "folderPath": "ShiftLogix\\api_gateway\\app\\application\\",
+            "color": "foldercolorizer.color_00cc66"
+        },
+        {
+            "folderPath": "ShiftLogix\\api_gateway\\app\\presentation\\",
+            "color": "foldercolorizer.color_0099cc"
+        },
+        {
+            "folderPath": "ShiftLogix\\api_gateway\\app\\presentation\\__init__.py\\",
+            "color": "foldercolorizer.color_666666"
+        },
+        {
+            "folderPath": "ShiftLogix\\api_gateway\\app\\application\\__init__.py\\",
+            "color": "foldercolorizer.color_666666"
+        },
+        {
+            "folderPath": "ShiftLogix\\api_gateway\\app\\templates\\",
+            "color": "foldercolorizer.color_ffcc33"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\",
+            "color": "foldercolorizer.color_ffcccc"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\presentation\\",
+            "color": "foldercolorizer.color_33cc66"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\application\\",
+            "color": "foldercolorizer.color_00cccc"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\persistence\\",
+            "color": "foldercolorizer.color_cc99cc"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\validators\\",
+            "color": "foldercolorizer.color_9900cc"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\__init__.py\\",
+            "color": "foldercolorizer.color_cc3333"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\validators\\__init__.py\\",
+            "color": "foldercolorizer.color_666666"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\presentation\\__init__.py\\",
+            "color": "foldercolorizer.color_666666"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\persistence\\__init__.py\\",
+            "color": "foldercolorizer.color_666666"
+        },
+        {
+            "folderPath": "ShiftLogix\\schedule_service\\app\\application\\__init__.py\\",
+            "color": "foldercolorizer.color_666666"
+        }
+    ]
+}

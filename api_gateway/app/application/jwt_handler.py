@@ -1,4 +1,4 @@
-# File: api_gateway/app/utils/jwt_handler.py
+# File: api_gateway/app/application/jwt_handler.py
 # Purpose: Middleware to validate JWT tokens before proxying requests
 
 import os

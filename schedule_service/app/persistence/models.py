@@ -1,4 +1,4 @@
-# File: schedule_service/app/models.py
+# File: schedule_service/app/persistence/models.py
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import time, date
@@ -28,7 +28,7 @@ class ShiftChange(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     employee_id = db.Column(db.Integer, nullable=False)
-    request_type = db.Column(db.String(10), nullable=False)  # 'add', 'remove', 'swap'
+    request_type = db.Column(db.String(10), nullable=False)  # 'add' or 'drop'
     shift_date = db.Column(db.Date, nullable=False)
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)

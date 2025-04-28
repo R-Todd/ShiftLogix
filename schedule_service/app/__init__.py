@@ -8,7 +8,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
-from app.models import db
+from app.persistence.models import db
 
 # Load environment variables from .env
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
@@ -29,11 +29,11 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
 
-    # Register routes (adjust based on your files)
-    from app.routes.schedule_routes import schedule_bp
-    from app.routes.availability_routes import availability_bp
-    app.register_blueprint(schedule_bp)
-    app.register_blueprint(availability_bp)
+    # Register routes (fixed paths)
+    from app.presentation.schedule_routes import schedule_bp
+    from app.presentation.availability_routes import availability_bp
+    app.register_blueprint(schedule_bp, url_prefix="/api/schedule")
+    app.register_blueprint(availability_bp, url_prefix="/api/availability")
 
     # Create tables if needed
     with app.app_context():

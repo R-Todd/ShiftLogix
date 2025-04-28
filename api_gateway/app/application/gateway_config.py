@@ -1,4 +1,4 @@
-# File: api_gateway/app/gateway_config.py
+# File: api_gateway/app/application/gateway_config.py
 # Purpose: Centralized config for all downstream microservice URLs
 
 import os

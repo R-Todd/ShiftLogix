@@ -1,7 +1,8 @@
+# File: schedule_service/app/presentation/availability_routes.py
+
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from app.models import db, Availability
-from datetime import datetime
+from app.application.availability_service import AvailabilityService
 from app.validators.availability_validator import validate_availability
 
 availability_bp = Blueprint("availability_bp", __name__, url_prefix="/availability")
@@ -10,7 +11,7 @@ availability_bp = Blueprint("availability_bp", __name__, url_prefix="/availabili
 @jwt_required()
 def get_availability():
     employee_id = get_jwt_identity()
-    availabilities = Availability.query.filter_by(employee_id=employee_id).all()
+    availabilities = AvailabilityService.get_availability(employee_id)
 
     return jsonify([{
         "day_of_week": a.day_of_week,
@@ -28,23 +29,9 @@ def submit_availability():
         return jsonify({"success": False, "message": error}), 400
 
     employee_id = get_jwt_identity()
-    day = data["day_of_week"]
-    start = datetime.strptime(data["start_time"], "%H:%M").time()
-    end = datetime.strptime(data["end_time"], "%H:%M").time()
 
-    existing = Availability.query.filter_by(employee_id=employee_id, day_of_week=day).first()
-
-    if existing:
-        existing.start_time = start
-        existing.end_time = end
-    else:
-        new = Availability(
-            employee_id=employee_id,
-            day_of_week=day,
-            start_time=start,
-            end_time=end
-        )
-        db.session.add(new)
-
-    db.session.commit()
-    return jsonify({"success": True, "message": "Availability saved."}), 200
+    try:
+        AvailabilityService.post_availability(employee_id, data)
+        return jsonify({"success": True, "message": "Availability saved."}), 200
+    except ValueError as e:
+        return jsonify({"success": False, "message": str(e)}), 400
