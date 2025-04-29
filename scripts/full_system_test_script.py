@@ -2,8 +2,8 @@ import requests
 
 # ===== CONFIGURATION =====
 API_GATEWAY_URL = "http://localhost:8080/api"
-EMAIL = "test_user@example.com"
-PASSWORD = "TestPass123"
+EMAIL = "example3@example.com"
+PASSWORD = "password3"
 
 # ===== 1. LOGIN AND GET JWT =====
 print("\n🔑 [1] Logging in to retrieve JWT...")

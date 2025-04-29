@@ -5,7 +5,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.application.schedule_service import ScheduleService
 from app.validators.schedule_validator import validate_shift_request
 
-schedule_bp = Blueprint("schedule_bp", __name__, url_prefix="/schedule")
+schedule_bp = Blueprint("schedule_bp", __name__, url_prefix="/api/schedule")
 
 @schedule_bp.route("/shifts", methods=["GET"])
 @jwt_required()
