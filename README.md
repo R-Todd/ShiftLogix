@@ -155,18 +155,6 @@ Repeat for:
 - `schedule_service`
 - `api_gateway`
 
----
-
-## 5. Testing Endpoints
-
-Sample scripts to test services:
-
-```bash
-bash auth_service/scripts/test_auth.sh
-bash clock_service/scripts/test_clock.sh
-bash schedule_service/scripts/test_schedule.sh
-bash api_gateway/scripts/test_ui.sh
-```
 
 ---
 
@@ -178,4 +166,3 @@ bash api_gateway/scripts/test_ui.sh
 
 ---
 
-✅ With this, you can safely configure ShiftLogix on any machine without leaking sensitive keys or passwords.
