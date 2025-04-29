@@ -4,46 +4,150 @@
 <head>
   <meta charset="UTF-8">
   <title>Schedule - ShiftLogix</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 20px;
+      position: relative;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+    .top-right {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    .top-right a {
+      text-decoration: none;
+      color: white;
+      font-size: 0.9em;
+      padding: 8px 12px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid #fff;
+      border-radius: 4px;
+    }
+    .container {
+      width: 40%;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: left;
+    }
+    .button {
+      display: inline-block;
+      margin: 10px 5px 0;
+      padding: 8px 16px;
+      text-decoration: none;
+      color: white;
+      background-color: #007BFF;
+      border-radius: 5px;
+    }
+    .button:hover {
+      background-color: #0056b3;
+    }
+    form label {
+      display: inline-block;
+      width: 120px;
+      margin-bottom: 8px;
+    }
+    form input, form select {
+      padding: 6px;
+      margin-bottom: 12px;
+      width: calc(100% - 140px);
+    }
+    form button {
+      margin-top: 10px;
+      padding: 10px 20px;
+    }
+    .flash-success {
+      color: #155724;
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: 8px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+    }
+    .flash-error {
+      color: #721c24;
+      background-color: #f8d7da;
+      border: 1px solid #f5c6cb;
+      padding: 8px;
+      margin-bottom: 12px;
+      border-radius: 4px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    ul li {
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
 </head>
 <body>
-  <h1>Your Assigned Shifts</h1>
+  <header>
+    <h1>ShiftLogix</h1>
+    <div class="top-right">
+      <a href="/dashboard">← Dashboard</a>
+    </div>
+  </header>
 
-  <!-- Flash Messages -->
-  {% if messages %}
-    {% for category, msg in messages %}
-      <div class="{{ category }}">{{ msg }}</div>
-    {% endfor %}
-  {% endif %}
+  <div class="container">
+    <h2>Your Assigned Shifts</h2>
 
-  {% if shifts %}
-    <ul>
-      {% for shift in shifts %}
-        <li>{{ shift.shift_date }} | {{ shift.start_time }} - {{ shift.end_time }}</li>
+    <!-- Flash Messages -->
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="flash-{{ category }}">{{ msg }}</div>
       {% endfor %}
-    </ul>
-  {% else %}
-    <p>No shifts assigned.</p>
-  {% endif %}
+    {% endif %}
 
-  <hr>
-  <h2>Request Shift Change</h2>
-  <form action="/schedule" method="POST">
-    <label>Shift Date:</label>
-    <input type="date" name="shift_date" required><br>
+    <!-- Assigned Shifts List -->
+    {% if shifts %}
+      <ul>
+        {% for shift in shifts %}
+          <li>{{ shift.shift_date }} | {{ shift.start_time }} - {{ shift.end_time }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No shifts assigned.</p>
+    {% endif %}
 
-    <label>Start Time:</label>
-    <input type="time" name="start_time" required><br>
+    <hr>
 
-    <label>End Time:</label>
-    <input type="time" name="end_time" required><br>
+    <h2>Request Shift Change</h2>
+    <form action="/schedule" method="POST">
+      <label for="shift_date">Shift Date:</label>
+      <input type="date" id="shift_date" name="shift_date" required><br>
 
-    <label>Request Type:</label>
-    <select name="request_type" required>
-      <option value="add">Add</option>
-      <option value="drop">Drop</option>
-    </select><br>
+      <label for="start_time">Start Time:</label>
+      <input type="time" id="start_time" name="start_time" required><br>
 
-    <button type="submit">Submit Shift Request</button>
-  </form>
+      <label for="end_time">End Time:</label>
+      <input type="time" id="end_time" name="end_time" required><br>
+
+      <label for="request_type">Request Type:</label>
+      <select id="request_type" name="request_type" required>
+        <option value="add">Add</option>
+        <option value="drop">Drop</option>
+      </select><br>
+
+      <button type="submit" class="button">Submit Shift Request</button>
+    </form>
+  </div>
 </body>
 </html>
