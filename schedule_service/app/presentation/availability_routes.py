@@ -5,7 +5,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.application.availability_service import AvailabilityService
 from app.validators.availability_validator import validate_availability
 
-availability_bp = Blueprint("availability_bp", __name__, url_prefix="/availability")
+# Notice: No need to set url_prefix here — it is handled in create_app()
+availability_bp = Blueprint('availability', __name__, url_prefix='/api/availability')
 
 @availability_bp.route("/", methods=["GET"])
 @jwt_required()

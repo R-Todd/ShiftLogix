@@ -32,8 +32,9 @@ def create_app():
     # Register routes (fixed paths)
     from app.presentation.schedule_routes import schedule_bp
     from app.presentation.availability_routes import availability_bp
-    app.register_blueprint(schedule_bp, url_prefix="/api/schedule")
-    app.register_blueprint(availability_bp, url_prefix="/api/availability")
+    
+    app.register_blueprint(schedule_bp)
+    app.register_blueprint(availability_bp)
 
     # Create tables if needed
     with app.app_context():

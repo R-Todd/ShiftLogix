@@ -112,7 +112,7 @@ def availability():
             "end_time": request.form["end_time"]
         }
         try:
-            res = requests.post(f"{SCHEDULE_SERVICE_URL}/availability/", json=payload, headers=headers)
+            res = requests.post(f"{SCHEDULE_SERVICE_URL}/api/availability/", json=payload, headers=headers)
             try:
                 msg = res.json().get("message", "✅ Availability submitted.")
             except ValueError:
@@ -124,7 +124,7 @@ def availability():
             flash("❌ Failed to submit availability.", "error")
 
     try:
-        res = requests.get(f"{SCHEDULE_SERVICE_URL}/availability/", headers=headers)
+        res = requests.get(f"{SCHEDULE_SERVICE_URL}/api/availability/", headers=headers)
         if res.ok:
             data = res.json()
     except Exception as e:
@@ -148,7 +148,7 @@ def schedule():
             "request_type": request.form.get("request_type"),
         }
         try:
-            res = requests.post(f"{SCHEDULE_SERVICE_URL}/schedule/request", json=payload, headers=headers)
+            res = requests.post(f"{SCHEDULE_SERVICE_URL}/api/schedule/request", json=payload, headers=headers)
             try:
                 msg = res.json().get("message", "✅ Shift request submitted.")
             except ValueError:
@@ -161,7 +161,7 @@ def schedule():
         return redirect("/schedule")
 
     try:
-        res = requests.get(f"{SCHEDULE_SERVICE_URL}/schedule/shifts", headers=headers)
+        res = requests.get(f"{SCHEDULE_SERVICE_URL}/api/schedule/shifts", headers=headers)
         if res.ok:
             shifts = res.json()
     except Exception as e:

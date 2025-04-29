@@ -4,7 +4,7 @@
 # ShiftLogix Full Cleanup Script (Bash Version)
 # ==============================================================
 
-echo "🚀 Starting ShiftLogix full cleanup..."
+
 
 # Step 1: Stop and remove containers
 docker-compose down

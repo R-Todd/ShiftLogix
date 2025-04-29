@@ -12,14 +12,14 @@ availability_bp = Blueprint("availability_proxy", __name__, url_prefix="/api/ava
 @availability_bp.route("/", methods=["GET"])
 @jwt_required_gateway()
 def get_availability():
-    res = requests.get(f"{SCHEDULE_SERVICE_URL}/availability/", headers=request.headers)
+    res = requests.get(f"{SCHEDULE_SERVICE_URL}/api/availability/", headers=request.headers)
     return jsonify(res.json()), res.status_code
 
 @availability_bp.route("/", methods=["POST"])
 @jwt_required_gateway()
 def post_availability():
     res = requests.post(
-        f"{SCHEDULE_SERVICE_URL}/availability/",
+        f"{SCHEDULE_SERVICE_URL}/api/availability/",
         json=request.get_json(),
         headers=request.headers
     )

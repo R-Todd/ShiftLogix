@@ -1,7 +1,7 @@
 import requests
 
-BASE_URL = "http://localhost:5003"
-AUTH_URL = "http://localhost:5001/api/auth/login"
+BASE_URL = "http://localhost:8080/api"
+AUTH_URL = "http://localhost:8080/api/auth/login"
 
 # Log in to get token
 r = requests.post(AUTH_URL, json={"email": "test_user@example.com", "password": "TestPass123"})
@@ -10,7 +10,7 @@ headers = {"Authorization": f"Bearer {token}"}
 
 # Submit availability
 print("📅 Submitting availability...")
-r = requests.post(f"{BASE_URL}/availability/", json={
+r = requests.post(f"{BASE_URL}/availability", json={
     "day_of_week": "Monday",
     "start_time": "09:00",
     "end_time": "17:00"
@@ -19,7 +19,7 @@ print("✅ Availability response:", r.status_code, r.json())
 
 # Get availability
 print("\n📋 Getting availability...")
-r = requests.get(f"{BASE_URL}/availability/", headers=headers)
+r = requests.get(f"{BASE_URL}/availability", headers=headers)
 print("✅ Availability list:", r.status_code, r.json())
 
 # Request a shift change
