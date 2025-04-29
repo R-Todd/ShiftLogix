@@ -1,7 +1,7 @@
 
 # ShiftLogix (Layered Architecture)
 
-This document explains how to set up and run the layered-architecture version of ShiftLogix on a new computer, including all required environment variable values.
+This document explains how to set up and run the layered-architecture version of ShiftLogix on a new computer, including environment file templates with explanations.
 
 ---
 
@@ -9,7 +9,7 @@ This document explains how to set up and run the layered-architecture version of
 
 - **Git**  
 - **Docker & Docker Compose**  
-- **Python 3.11 & pip** (if you want to run services locally outside Docker)
+- **Python 3.11 & pip** (optional, if running services manually)
 
 ---
 
@@ -24,76 +24,99 @@ cd ShiftLogix
 
 ## 2. Environment Configuration
 
-Each service (and the API gateway) uses a `.env` file loaded via `python-dotenv`. Below are the exact values you need in **each** file.
+Each service (and the API Gateway) uses a `.env` file.  
+Below are **templates** with **safe sample values** and **commented explanations**.
 
-### 2.1 Root `.env` (`ShiftLogix/.env`)
+You must manually create a `.env` file in each required directory before running the project.
+
+---
+
+### 📂 Root `.env` (ShiftLogix/.env)
 
 ```dotenv
-# Shared MySQL credentials
-MYSQL_USER=shiftlogix_user
-MYSQL_PASSWORD=AdminPassword1234
-MYSQL_ROOT_PASSWORD=rootpass
+# --- MySQL Credentials (used by Docker Compose MySQL containers) ---
+MYSQL_USER=sample_user                 # Database username
+MYSQL_PASSWORD=sample_password         # Database password
+MYSQL_ROOT_PASSWORD=sample_rootpass     # MySQL root account password
 
-# Database names per microservice
-AUTH_DB_NAME=shiftlogix
-CLOCK_DB_NAME=clock_service_db
-SCHEDULE_DB_NAME=schedule_service_db
+# --- Database Names (for each microservice) ---
+AUTH_DB_NAME=auth_service_db            # Database for Auth Service
+CLOCK_DB_NAME=clock_service_db          # Database for Clock Service
+SCHEDULE_DB_NAME=schedule_service_db    # Database for Schedule Service
 ```
 
-### 2.2 API Gateway `.env` (`ShiftLogix/api_gateway/.env`)
+---
+
+### 📂 API Gateway `.env` (ShiftLogix/api_gateway/.env)
 
 ```dotenv
-# JWT key for verifying tokens
-JWT_SECRET_KEY=super_secret_abc123
+# --- JWT Token Secret ---
+JWT_SECRET_KEY=sample_jwt_secret        # Secret for verifying JWT tokens (must match Auth Service)
 
-# Downstream service base URLs
+# --- URLs of Microservices (inside Docker Compose network) ---
 AUTH_SERVICE_URL=http://auth-service:5001
 CLOCK_SERVICE_URL=http://clock-service:5002
 SCHEDULE_SERVICE_URL=http://schedule-service:5003
 ```
 
-### 2.3 Auth Service `.env` (`ShiftLogix/auth_service/.env`)
+---
+
+### 📂 Auth Service `.env` (ShiftLogix/auth_service/.env)
 
 ```dotenv
-# Flask & JWT secrets
-SECRET_KEY=xyz123fgb
-JWT_SECRET_KEY=super_secret_abc123
+# --- Flask Secret Key ---
+SECRET_KEY=sample_flask_secret          # Secret for signing Flask session cookies
 
-# SQLAlchemy connection (auth-db)
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://shiftlogix_user:AdminPassword1234@auth-db/shiftlogix
-SQLALCHEMY_TRACK_MODIFICATIONS=False
+# --- JWT Secret Key ---
+JWT_SECRET_KEY=sample_jwt_secret         # Secret for generating/verifying JWTs (shared with Gateway)
 
-# Host for wait-for-db
+# --- Database Connection (Auth Service) ---
+SQLALCHEMY_DATABASE_URI=mysql+pymysql://sample_user:sample_password@auth-db/auth_service_db
+# Format: mysql+pymysql://<username>:<password>@<hostname>/<database>
+
+SQLALCHEMY_TRACK_MODIFICATIONS=False     # Recommended setting to disable event system
+
+# --- MySQL Host (used by wait-for-db.sh script) ---
 MYSQL_HOST=auth-db
 ```
 
-### 2.4 Clock Service `.env` (`ShiftLogix/clock_service/.env`)
+---
+
+### 📂 Clock Service `.env` (ShiftLogix/clock_service/.env)
 
 ```dotenv
-# Flask & JWT secrets
-SECRET_KEY=your_clock_secret
-JWT_SECRET_KEY=super_secret_abc123
+# --- Flask Secret Key ---
+SECRET_KEY=sample_clock_secret          # Secret for signing Flask session cookies
 
-# SQLAlchemy connection (clock-db)
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://shiftlogix_user:AdminPassword1234@clock-db/clock_service_db
+# --- JWT Secret Key ---
+JWT_SECRET_KEY=sample_jwt_secret         # Secret for verifying JWTs (shared with Gateway)
+
+# --- Database Connection (Clock Service) ---
+SQLALCHEMY_DATABASE_URI=mysql+pymysql://sample_user:sample_password@clock-db/clock_service_db
+
 SQLALCHEMY_TRACK_MODIFICATIONS=False
 
-# Host for wait-for-db
+# --- MySQL Host (used by wait-for-db.sh script) ---
 MYSQL_HOST=clock-db
 ```
 
-### 2.5 Schedule Service `.env` (`ShiftLogix/schedule_service/.env`)
+---
+
+### 📂 Schedule Service `.env` (ShiftLogix/schedule_service/.env)
 
 ```dotenv
-# Flask & JWT secrets
-SECRET_KEY=your_schedule_secret
-JWT_SECRET_KEY=super_secret_abc123
+# --- Flask Secret Key ---
+SECRET_KEY=sample_schedule_secret       # Secret for signing Flask session cookies
 
-# SQLAlchemy connection (schedule-db)
-SQLALCHEMY_DATABASE_URI=mysql+pymysql://shiftlogix_user:AdminPassword1234@schedule-db/schedule_service_db
+# --- JWT Secret Key ---
+JWT_SECRET_KEY=sample_jwt_secret         # Secret for verifying JWTs (shared with Gateway)
+
+# --- Database Connection (Schedule Service) ---
+SQLALCHEMY_DATABASE_URI=mysql+pymysql://sample_user:sample_password@schedule-db/schedule_service_db
+
 SQLALCHEMY_TRACK_MODIFICATIONS=False
 
-# Host for wait-for-db
+# --- MySQL Host (used by wait-for-db.sh script) ---
 MYSQL_HOST=schedule-db
 ```
 
@@ -101,44 +124,42 @@ MYSQL_HOST=schedule-db
 
 ## 3. Start the Full Stack
 
-1. **Ensure Docker Desktop is running.**  
-2. From the project root, run:
+After creating all `.env` files:
 
 ```bash
 docker-compose up --build
 ```
 
 This will:
-- Spin up three MySQL containers (`auth-db`, `clock-db`, `schedule-db`) with named volumes for persistence.
-- Wait for each DB via `wait-for-db.sh` before launching its Flask service.
-- Build and start the three microservices on ports **5001**, **5002**, **5003**.
-- Build and start the API Gateway on port **8080**.
 
-3. **Visit** `http://localhost:8080` to access the ShiftLogix UI/API Gateway.
+- Start MySQL containers (`auth-db`, `clock-db`, `schedule-db`).
+- Wait for databases to initialize.
+- Start microservices (`auth_service`, `clock_service`, `schedule_service`).
+- Start the API Gateway (`api_gateway`) on **http://localhost:8080**.
 
 ---
 
 ## 4. (Optional) Local Python Setup
 
-If you prefer running services directly in Python (outside Docker):
+You can run services manually without Docker:
 
 ```bash
-# From each service directory
+# In each service folder:
 pip install -r requirements.txt
 python run.py
 ```
 
 Repeat for:
-- `auth_service/`
-- `clock_service/`
-- `schedule_service/`
-- `api_gateway/`
+- `auth_service`
+- `clock_service`
+- `schedule_service`
+- `api_gateway`
 
 ---
 
 ## 5. Testing Endpoints
 
-Quick test scripts are available in each service’s `scripts/` folder. For example:
+Sample scripts to test services:
 
 ```bash
 bash auth_service/scripts/test_auth.sh
@@ -147,8 +168,14 @@ bash schedule_service/scripts/test_schedule.sh
 bash api_gateway/scripts/test_ui.sh
 ```
 
-These cover registration, login, clock-in/out, availability CRUD, and shift retrieval to verify everything’s wired up correctly.
+---
+
+## Important Notes
+
+- Never commit real `.env` files — use these **templates** instead.
+- Always customize secrets and passwords for production environments.
+- JWT_SECRET_KEY must match across Auth Service, Clock Service, Schedule Service, and API Gateway.
 
 ---
 
-With this in place, you should be able to clone, configure, and spin up the entire ShiftLogix system on any new machine. Enjoy!
+✅ With this, you can safely configure ShiftLogix on any machine without leaking sensitive keys or passwords.
